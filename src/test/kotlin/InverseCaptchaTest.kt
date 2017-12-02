@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import junit.framework.Assert.assertEquals
+import org.junit.Test
 
 internal class InverseCaptchaTest {
 
