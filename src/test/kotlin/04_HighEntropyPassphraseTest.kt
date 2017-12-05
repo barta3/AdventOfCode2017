@@ -2,7 +2,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class HighEntropyPassphraseTest {
+class `04_HighEntropyPassphraseTest` {
     @Test
     fun isValid() {
         assertTrue(HighEntropyPassphrase().isValid("aa bb cc dd ee"))

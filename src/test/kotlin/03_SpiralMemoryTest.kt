@@ -1,7 +1,7 @@
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class SpiralMemoryTest {
+class `03_SpiralMemoryTest` {
     @Test
     fun calcDistance() {
         assertEquals(0, SpiralMemory().calcDistance(1))
