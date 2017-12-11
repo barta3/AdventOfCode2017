@@ -18,6 +18,13 @@ class Stream {
         }
         return score
     }
+
+    fun countGarbagePayload(input: String): Int {
+        val cleaned = input.replace(Regex("!."), "")
+        val regex = Regex("<.*?>")
+
+        return regex.findAll(cleaned).sumBy { it.value.length - 2 }
+    }
 }
 
 fun main(args: Array<String>) {
@@ -29,5 +36,8 @@ fun main(args: Array<String>) {
     println(cleaned)
     val score = Stream().calcScore(cleaned)
     println("Score $score")
+
+    val part2 = Stream().countGarbagePayload(input)
+    println("Part 2: $part2")
 }
 

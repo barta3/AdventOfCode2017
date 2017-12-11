@@ -35,4 +35,15 @@ class StreamTest {
         assertEquals(16, Stream().calcScore("{{{},{},{{}}}}"))
     }
 
+    @Test
+    fun testCountGarbagePayload() {
+        assertEquals(0, Stream().countGarbagePayload("<>"))
+        assertEquals(17, Stream().countGarbagePayload("<random characters>"))
+        assertEquals(3, Stream().countGarbagePayload("<<<<>"))
+        assertEquals(2, Stream().countGarbagePayload("<{!>}>"))
+        assertEquals(0, Stream().countGarbagePayload("<!!>"))
+        assertEquals(0, Stream().countGarbagePayload("<!!!>>"))
+        assertEquals(10, Stream().countGarbagePayload("<{o\"i!a,<{i<a>"))
+    }
+
 }
