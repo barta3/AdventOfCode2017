@@ -66,6 +66,7 @@ enum class Comp(val s: String) {
 
 fun run(instructions: ArrayList<Instruction>): HashMap<String, Int> {
 
+    var max = 0
     val regs = HashMap<String, Int>()
 
     instructions.forEach { i ->
@@ -73,10 +74,13 @@ fun run(instructions: ArrayList<Instruction>): HashMap<String, Int> {
             val amountAbs = if(Operation.DEC == i.operation) (-1) * i.amount else i.amount
             regs.merge(i.reg, amountAbs, Math::addExact)
             println("Match $i newVals: $regs")
+            max = Math.max(max, regs.get(i.reg)!!)
         } else {
             println("No match $i")
         }
     }
+
+    println("Overall Max: $max")
 
     return regs
 }
@@ -90,7 +94,7 @@ fun main(args: Array<String>) {
     println(registers)
 
     val maxValue = registers.values.max()
-    println("Max is $maxValue")
+    println("Final Max is $maxValue")
 
 }
 
