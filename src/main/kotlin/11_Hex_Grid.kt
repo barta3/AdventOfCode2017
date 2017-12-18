@@ -16,6 +16,7 @@ class HexGrid {
     fun goSteps(steps: String) {
         var x = 0
         var y = 0
+        var max = 0
         steps.split(",").forEach { step ->
             when (step) {
                 "n" -> x++
@@ -31,8 +32,11 @@ class HexGrid {
 
             }
             println("X: $x  Y:$y")
+            val currentDist = Math.max(x.absoluteValue, x.absoluteValue)
+            max = Math.max(max, currentDist)
         }
-        println(Math.max(x.absoluteValue, x.absoluteValue))
+        println("Dist to Final: ${Math.max(x.absoluteValue, x.absoluteValue)}")
+        println("Overall Max: $max")
         println()
     }
 }
