@@ -23,13 +23,12 @@ fun createVertices(line: String) {
     exisiting?.vertices?.addAll(vertIds)
 }
 
-fun bfs(): MutableList<Int> {
+fun bfs(start: Edge): MutableList<Int> {
     val visited = mutableListOf<Int>()
     val queue = LinkedList<Edge>()
 
-    val zero = edges.find { e -> e.id == 0 }!!
-    queue.push(zero)
-    visited.add(zero.id)
+    queue.push(start)
+    visited.add(start.id)
 
     while (!queue.isEmpty()) {
         val current = queue.pop()
@@ -68,8 +67,21 @@ fun main(args: Array<String>) {
 
     println(edges)
 
-    val visited = bfs()
+    // Part1
+    val start = edges.find { e -> e.id == 0 }!!
+    val visited = bfs(start)
     println("${visited.size} Elements:  $visited")
+
+    // Part2
+    println()
+    val groups = mutableSetOf<String>()
+    for(edge in edges) {
+        val group = bfs(edge)
+        println(group)
+        groups.add(group.sorted().joinToString(""))
+    }
+    println()
+    println("${groups.size} Groups: ${groups.joinToString()}")
 }
 
 
