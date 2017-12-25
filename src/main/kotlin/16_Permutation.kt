@@ -1,45 +1,66 @@
-import java.lang.Exception
 import java.util.*
 
 fun main(args: Array<String>) {
     example()
-    puzzle()
+    part1()
+    part2()
 }
 
-fun puzzle() {
+fun part1() {
     val input = "abcdefghijklmnop".toMutableList()
     val moves = Permutation::class.java
             .getResource("16_input.txt")
             .readText()
 
     val res = Permutation(input).run(moves)
-    println("End: $res")
+    println("Part 1: $res")
 }
 
-fun example() {
+fun part2() {
+    var input = "abcdefghijklmnop".toMutableList()
+    val moves = Permutation::class.java
+            .getResource("16_input.txt")
+            .readText()
 
+    var res = "start"
+    val states = mutableSetOf<String>()
+    var runs = 0
+    val billion = 1_000_000_000
+    for (i in 0..billion) {
+        res = Permutation(input).run(moves)
 
-    val demo = "12/0"
-    println(demo.split("/")[1])
+        if (states.contains(res)) {
+            println("Repeats after $i")
+            runs = i
+            break
+        }
 
-    val input = "abcde"
-    val moves = "s1,x3/4,pe/b"
+        states.add(res)
+    }
 
-    val list = input.toMutableList()
-    val res = Permutation(list).run(moves)
+    input = "abcdefghijklmnop".toMutableList()
+    repeat(billion % runs) {
+        res = Permutation(input).run(moves)
+    }
 
-    println("End: $res")
+    println("Part 2: $res")
 }
 
 class Permutation(val list: MutableList<Char>) {
+
     fun run(moves: String): String {
-        println("Start $moves")
 
         moves.split(",").forEach { m ->
             when (m[0]) {
                 's' -> spin(m.drop(1))
-                'x' -> exchange(m.drop(1))
-                'p' -> partner(m.drop(1))
+                'x' -> {
+                    val (a, b) = m.drop(1).split("/").map { it.toInt() }
+                    Collections.swap(list, a, b)
+                }
+                'p' -> {
+                    val (a, b) = m.drop(1).split("/").map { it[0] }
+                    Collections.swap(list, list.indexOf(a), list.indexOf(b))
+                }
             }
 
         }
@@ -47,37 +68,21 @@ class Permutation(val list: MutableList<Char>) {
     }
 
     private fun spin(move: String) {
-        //println(list)
-        println("spin $move")
         val n = Integer.valueOf(move)
         for (i in 1..n) {
             val r = list.removeAt(list.size - 1)
-            //println("Move $r to front")
             list.add(0, r)
         }
-        //println(list)
     }
 
-    private fun exchange(move: String) {
+}
 
-        println("exchange $move")
-        val vals = move.split("/")
-        val posA = Integer.valueOf(vals[0].trim())
-        val posB = Integer.valueOf(vals[1].trim())
+fun example() {
+    val input = "abcde"
+    val moves = "s1,x3/4,pe/b"
 
-        Collections.swap(list, posA, posB)
-        //println(list)
+    val list = input.toMutableList()
+    val res = Permutation(list).run(moves)
 
-    }
-
-    private fun partner(move: String) {
-        println("partner $move")
-        val a = move.split("/")[0]
-        val b = move.split("/")[1]
-        val posA = list.indexOf(a[0])
-        val posB = list.indexOf(b[0])
-        Collections.swap(list, posA, posB)
-
-        //println(list)
-    }
+    println("Example: $res")
 }
