@@ -1,11 +1,17 @@
-class Generator(val factor: Long, start: Long) {
+class Generator(val factor: Long, start: Long,
+                val multimpleOf: Int) {
 
     var prev = start
     fun generateNext(): Long {
 
         val m = prev * factor
-        val r = m % 2147483647
+        var r = m.rem(2147483647)
+
         prev = r
+        while (r.rem(multimpleOf) != 0L) {
+            r = generateNext()
+        }
+
         return r
     }
 }
@@ -13,15 +19,16 @@ class Generator(val factor: Long, start: Long) {
 fun main(args: Array<String>) {
 
     // Example
-    // val a = Generator(16807, 65)
-    // val b = Generator(48271, 8921)
+    //val a = Generator(16807, 65, 4)
+    //val b = Generator(48271, 8921, 8)
 
-    val a = Generator(16807, 873)
-    val b = Generator(48271, 583)
+    // Puzzle Input
+    val a = Generator(16807, 873, 4)
+    val b = Generator(48271, 583, 8)
 
 
     var matches = 0
-    for (i in 0..40_000_000) {
+    for (i in 1..5_000_000) {
         val ga = a.generateNext()
         val gb = b.generateNext()
 
@@ -30,7 +37,7 @@ fun main(args: Array<String>) {
         if (match(ga.toInt(), gb.toInt())) {
             matches++
         }
-        if (i % 1000 == 0) println(i)
+        if (i % 100_000 == 0) println(i)
     }
     println("Number of Matches: $matches")
 }
