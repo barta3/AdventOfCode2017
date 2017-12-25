@@ -6,7 +6,7 @@ fun main(args: Array<String>) {
     part2()
 }
 
-fun part1() {
+private fun part1() {
     val input = "abcdefghijklmnop".toMutableList()
     val moves = Permutation::class.java
             .getResource("16_input.txt")
@@ -16,7 +16,7 @@ fun part1() {
     println("Part 1: $res")
 }
 
-fun part2() {
+private fun part2() {
     var input = "abcdefghijklmnop".toMutableList()
     val moves = Permutation::class.java
             .getResource("16_input.txt")
