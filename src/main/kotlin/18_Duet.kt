@@ -1,5 +1,5 @@
 var soundFrq = 0L
-var regs = mutableListOf<Register>()
+var regs = mutableMapOf<Char, Long>()
 
 fun main(args: Array<String>) {
     //val lines = getLines("18_example.txt")
@@ -32,25 +32,18 @@ fun parse(lines: List<String>): MutableList<Instr> {
 
 data class Instr(val ix: Int, val instr: String, val regLabel: Char, var value: String) {
     fun exec(): Int {
-        var currReg = regs.find { register -> register.label == regLabel }
-        if (currReg == null) {
-            currReg = Register(regLabel)
-            regs.add(currReg)
-        }
-        val other = regs.find { r -> r.label == value[0] }
-        val otherValue = other?.value ?: if (value == "_") null else value.toLong()
+        regs.computeIfAbsent(regLabel, { 0 })
+        val currentValue = regs.get(regLabel)!!
+        val otherValue = regs[value[0]] ?: if (value == "_") null else value.toLong()
 
         when (instr) {
-            "snd" -> {
-                soundFrq = currReg.value
-                println("Play $soundFrq")
-            }
-            "set" -> currReg.value = otherValue!!
-            "add" -> currReg.value += otherValue!!
-            "mul" -> currReg.value *= otherValue!!
-            "mod" -> currReg.value = currReg.value.rem(otherValue!!)
-            "rcv" -> if (currReg.value != 0L) return -1
-            "jgz" -> if (currReg.value > 0) return ix + value.toInt()
+            "snd" -> soundFrq = currentValue
+            "set" -> regs[regLabel] = otherValue!!
+            "add" -> regs.compute(regLabel, { k, v -> v?.plus(otherValue!!) })
+            "mul" -> regs.compute(regLabel, { k, v -> v?.times(otherValue!!) })
+            "mod" -> regs.compute(regLabel, { k, v -> v?.rem(otherValue!!) })
+            "rcv" -> if (currentValue != 0L) return -1
+            "jgz" -> if (currentValue > 0) return ix + value.toInt()
         }
         return ix + 1
     }
